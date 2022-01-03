@@ -24,26 +24,24 @@ module.exports = function toReadable(number) {
     let dozens = [
         "twenty",
         "thirty",
-        "fourty",
+        "forty",
         "fifty",
         "sixty",
         "seventy",
         "eighty",
         "ninety",
     ];
-
     let value = number.toString();
 
-    function dozensToText() {
-        let dozenText =
-            units[parseInt(value[1])] == "zero"
-                ? ""
-                : units[parseInt(value[1])];
-
-        if (dozenText == "") {
-            return dozens[parseInt(value[0] - 2)];
+    function dozensToText(textedNumber) {
+        if (units[parseInt(textedNumber[1])] == "zero") {
+            return dozens[parseInt(textedNumber[0] - 2)];
         } else {
-            return dozens[parseInt(value[0] - 2)] + " " + dozenText;
+            return (
+                dozens[parseInt(textedNumber[0] - 2)] +
+                " " +
+                units[parseInt(textedNumber[1])]
+            );
         }
     }
 
@@ -52,6 +50,20 @@ module.exports = function toReadable(number) {
     }
 
     if (value.length < 3) {
-        return dozensToText();
+        return dozensToText(value);
+    }
+
+    if (value.length >= 3) {
+        let dozensDigits = "";
+        if (value.slice(1, 3) == "00") {
+            return units[parseInt(value[0])] + " hundred";
+        } else if (value.slice(1, 2) == "0") {
+            dozensDigits = units[parseInt(value.slice(2, 3))];
+        } else if (parseInt(value.slice(1, 3)) < 20) {
+            dozensDigits = units[parseInt(value.slice(1, 3))];
+        } else {
+            dozensDigits = dozensToText(value.slice(1, 3));
+        }
+        return units[parseInt(value[0])] + " hundred " + dozensDigits;
     }
 };
