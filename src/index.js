@@ -31,24 +31,27 @@ module.exports = function toReadable(number) {
         "eighty",
         "ninety",
     ];
-    let hundreds = "hundred";
-    let thouthands = "thousand";
 
     let value = number.toString();
+
+    function dozensToText() {
+        let dozenText =
+            units[parseInt(value[1])] == "zero"
+                ? ""
+                : units[parseInt(value[1])];
+
+        if (dozenText == "") {
+            return dozens[parseInt(value[0] - 2)];
+        } else {
+            return dozens[parseInt(value[0] - 2)] + " " + dozenText;
+        }
+    }
 
     if (number < 20) {
         return units[number];
     }
 
     if (value.length < 3) {
-        let tenDigits =
-            units[parseInt(value[1])] == "zero"
-                ? ""
-                : units[parseInt(value[1])];
-        if (tenDigits == "") {
-            return dozens[parseInt(value[0] - 2)];
-        } else {
-            return dozens[parseInt(value[0] - 2)] + " " + tenDigits;
-        }
+        return dozensToText();
     }
 };
