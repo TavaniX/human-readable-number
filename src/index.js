@@ -1,5 +1,5 @@
 module.exports = function toReadable(number) {
-    let one = [
+    let units = [
         "zero",
         "one",
         "two",
@@ -18,23 +18,37 @@ module.exports = function toReadable(number) {
         "fifteen",
         "sixteen",
         "seventeen",
+        "eighteen",
         "nineteen",
     ];
-    let ten = [
+    let dozens = [
         "twenty",
         "thirty",
         "fourty",
         "fifty",
         "sixty",
         "seventy",
+        "eighty",
         "ninety",
     ];
-    let hundred = "hundred";
-    let thouthand = "thousand";
+    let hundreds = "hundred";
+    let thouthands = "thousand";
 
-    let valueLength = number.length;
+    let value = number.toString();
 
     if (number < 20) {
-        return one[number];
+        return units[number];
+    }
+
+    if (value.length < 3) {
+        let tenDigits =
+            units[parseInt(value[1])] == "zero"
+                ? ""
+                : units[parseInt(value[1])];
+        if (tenDigits == "") {
+            return dozens[parseInt(value[0] - 2)];
+        } else {
+            return dozens[parseInt(value[0] - 2)] + " " + tenDigits;
+        }
     }
 };
